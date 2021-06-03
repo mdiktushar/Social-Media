@@ -8,6 +8,7 @@ const passport = require('passport')
 
 // Load Imput Validation
 const validateRegisterInput = require('../../validation/register')
+const validateLoginInput = require('../../validation/login')
 
 // Load User model
 const User = require('../../models/Users')
@@ -36,7 +37,8 @@ router.post('/register', (req, res) => {
         email: req.body.email
     }).then(user => {
         if(user) {
-            return res.status(400).json({email: 'Email already user for an account'})
+            errors.email = 'Email already user for an account'
+            return res.status(400).json(errors.email)
         }
         const avatar = gravatar.url(req.body.email, {
             s: '200', // Size
@@ -65,17 +67,26 @@ router.post('/register', (req, res) => {
 // @des    Login User/Returning Token
 // @access Public
 router.post('/login', (req, res) => {
+    const {errors, isValid} = validateLoginInput(req.body)
+
+    // Check Validation
+    if(!isValid) {
+        return res.status(400).json(errors)
+    }
+
     const email = req.body.email;
     const password = req.body.password;
 
     // Find user by Email
     User.findOne({email}).then(user => {
         if(!user) { //Chek for user
-            return res.status(404).json({email: 'Email not found'})
+            errors.email = 'Email not found'
+            return res.status(404).json(errors.email)
         }
         bcrypt.compare(password, user.password).then(isMatch => {
             if(!isMatch) { // Incorrect Passowrd
-                return res.status(400).json({password: 'Incorrect Passowrd '})
+                errors.password = 'Incorrect Passowrd'
+                return res.status(400).json(errors.password)
             }
             // User Matched 
             const payload = { // jwt Payload
