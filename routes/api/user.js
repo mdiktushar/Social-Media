@@ -98,7 +98,7 @@ router.post('/login', (req, res) => {
             jwt.sign(
                 payload,
                 keys.secretOrkey,
-                {expiresIn: 86400}, //Oneday
+                {expiresIn: 86400}, // Token life time is One day
                 (err, token) => {
                     res.json({
                         success: true,
