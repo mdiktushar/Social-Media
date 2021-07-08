@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-// import TextFieldGroup from '../common/TextFieldGroup'
+import TextAreaFieldGroup from '../common/TextAreaFieldGroup'
+import TextFieldGroup from '../common/TextFieldGroup'
+import InputGroup from '../common/InputGroup'
+import SelectListGroup from '../common/SelectListGroup'
 
 class CreateProfile extends Component {
     constructor(props) {
@@ -9,7 +12,7 @@ class CreateProfile extends Component {
         this.state = {
             displaySocialInputs: false,
             handle: '',
-            company: '',
+            company: '', 
             website: '',
             location: '',
             status: '',
@@ -52,9 +55,9 @@ CreateProfile.propTypes = {
     errors: PropTypes.object.isRequired
 }
 
-// const mapStateToProps = state => ({
-//     profile: state.profile,
-//     errors: state.errors
-// })
+const mapStateToProps = state => ({
+    profile: state.profile,
+    errors: state.errors
+})
 
-export default connect(null)(CreateProfile)
+export default connect(mapStateToProps)(CreateProfile)
